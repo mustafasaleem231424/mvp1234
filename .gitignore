@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Env files
+.env*.local
+.env
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Model files (too large for git — download from Colab)
+public/model/*.bin
+public/model/*.pb
+*.pt
+*.onnx
+*.torchscript
+
+# Training artifacts
+runs/
+data/
+dummy_dataset/
+*.h5
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+*.pt
+*.pb
+*.onnx
+!public/model/model.onnx
+*_saved_model/
