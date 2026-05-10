@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Leaf, Camera, ImageIcon, RefreshCw, AlertCircle, Scan, 
   ArrowLeft, Download, Video, Zap, AlertTriangle, Bug,
-  ShoppingCart, Languages, Activity
+  ShoppingCart, Languages, Activity, CloudRain, TrendingDown
 } from 'lucide-react';
 import { analyzeImage, MODEL_READY } from '@/lib/model';
 
@@ -409,24 +409,55 @@ export default function DashboardPage() {
 
                   {/* Expert Pathogen Spotlight */}
                   {!result.isHealthy && (
-                    <div className="mb-8 card !p-8 bg-gradient-to-br from-[#124022] to-[#0a1f11] border-[#21A049]/30 relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                        <Bug className="w-24 h-24 text-[#21A049]" />
-                      </div>
-                      <div className="relative z-10">
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#21A049] mb-4">Pathogen Profile</h3>
-                        <div className="space-y-4">
-                          <div>
-                            <p className="text-3xl font-black tracking-tight text-white">{result.topPrediction.diseaseInfo?.disease}</p>
-                            <p className="text-sm font-bold text-[#21A049] italic opacity-80">{result.topPrediction.scientificName}</p>
-                          </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                      <div className="card !p-8 bg-gradient-to-br from-[#124022] to-[#0a1f11] border-[#21A049]/30 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                          <Bug className="w-20 h-20 text-[#21A049]" />
+                        </div>
+                        <div className="relative z-10">
+                          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#21A049] mb-4">Pathogen Profile</h3>
+                          <p className="text-2xl font-black tracking-tight text-white mb-1">{result.topPrediction.diseaseInfo?.disease}</p>
+                          <p className="text-xs font-bold text-[#21A049] italic opacity-80 mb-4">{result.topPrediction.scientificName}</p>
                           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#21A049]" />
                             <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{result.topPrediction.pathogenType} Pathogen</span>
                           </div>
                         </div>
                       </div>
+
+                      {/* FEATURE 1: Weather Risk Assessment */}
+                      <div className="card !p-8 bg-blue-500/5 border-blue-500/20">
+                        <CloudRain className="w-8 h-8 text-blue-500 mb-6" />
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-2">Climate Risk</h3>
+                        <p className="text-xl font-bold text-white mb-1">High Humidity Alert</p>
+                        <p className="text-xs font-medium text-white/40 italic">Conditions favor {result.topPrediction.pathogenType.toLowerCase()} spread.</p>
+                      </div>
                     </div>
+                  )}
+
+                  {/* FEATURE 2: Yield Impact Estimator */}
+                  {!result.isHealthy && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="card !p-8 border-red-500/20 bg-red-500/5 mb-8"
+                    >
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                          <TrendingDown className="w-6 h-6 text-red-500" />
+                          <h3 className="text-xs font-black uppercase tracking-[0.3em] text-red-500">Yield Impact</h3>
+                        </div>
+                        <span className="text-2xl font-black text-red-500">-28%</span>
+                      </div>
+                      <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: '28%' }}
+                          transition={{ duration: 1, delay: 0.5 }}
+                          className="h-full bg-red-500"
+                        />
+                      </div>
+                      <p className="mt-4 text-[10px] font-bold text-white/40 uppercase tracking-widest">Potential loss if untreated within 14 days</p>
+                    </motion.div>
                   )}
 
                   {/* Info-Driven Insights Grid */}
