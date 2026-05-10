@@ -7,10 +7,10 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  title: "CropGuard AI — Plant Disease Detection for Farmers",
+  title: "CropGuard AI — Expert Botanical Diagnostics",
   description:
-    "Scan your crops with your phone camera. Instantly detect diseases on apple, tomato, grape, potato and 10+ more crops. Simple, accurate, free.",
-  keywords: "plant disease detection, crop scanner, farming AI, apple scab, agriculture app",
+    "Next-generation AI-powered plant pathology. Scan any crop to receive instant, expert-level diagnostics, tailored treatment protocols, and field management insights.",
+  keywords: "plant disease detection, crop scanner, farming AI, botanical diagnostics, expert agriculture AI",
 };
 
 export default function RootLayout({ children }) {

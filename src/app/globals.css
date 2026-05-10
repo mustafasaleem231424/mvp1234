@@ -38,18 +38,18 @@
     --surface-hover: #141414;
     --text: #ffffff;
     --text-secondary: #a3a3a3;
-    --border: rgba(255, 255, 255, 0.15);
-    
     --primary-glow: rgba(33, 160, 73, 0.3);
     --green-main: #21A049;
-    --green-hover: #1D8F41;
     --green-dark: #ffffff;
+    --green-light: #122416;
+    --surface: #0a0a0a;
+    --surface-hover: #121212;
+    --border: rgba(255, 255, 255, 0.12);
+    --header-bg: rgba(0, 0, 0, 0.9);
     
     --status-green: #21A049;
     --status-amber: #E59500;
     --status-red: #D32F2F;
-    
-    --header-bg: rgba(0, 0, 0, 0.85);
   }
 }
 
