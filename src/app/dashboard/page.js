@@ -230,7 +230,7 @@ export default function DashboardPage() {
 
       {/* ─── Elite Obsidian Header ─────────────────── */}
       <header className="sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="container-expert h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
               <Leaf className="w-6 h-6 text-black" />
@@ -242,29 +242,14 @@ export default function DashboardPage() {
               onClick={() => setLang(l => l === 'en' ? 'hi' : 'en')}
               className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
             >
-              <Languages className="w-4 h-4 text-[#21A049]" />
+              <Languages className="w-4 h-4 text-[#10B981]" />
               <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{lang === 'en' ? 'हिन्दी' : 'English'}</span>
             </button>
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F5E9] dark:bg-[#121F16] border border-[#A5D6A7] dark:border-[#2E7D32]">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4CAF50] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4CAF50]"></span>
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-tighter text-[#2E7D32] dark:text-[#4CAF50]">Expert AI Active</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-md">
-                <Leaf className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-black tracking-tighter text-lg text-[var(--green-dark)]">PreciFarm</span>
-            </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 relative z-10 flex flex-col">
-        {/* AI engine is always ready via Cloud API */}
-
+      <main className="flex-1 w-full max-w-4xl mx-auto px-6 py-12 relative z-10 flex flex-col items-center">
         <AnimatePresence mode="wait">
           {/* ─── Mode Selection ────────────────────── */}
           {!imagePreview && !inputMode && (
@@ -273,11 +258,11 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full space-y-8"
+              className="w-full space-y-12"
             >
-              <div className="text-center space-y-2">
-                <h1 className="text-4xl font-black tracking-tighter text-[var(--text)]">{t[lang].title}</h1>
-                <p className="text-[var(--text-secondary)] font-medium">{t[lang].subtitle}</p>
+              <div className="text-center space-y-4">
+                <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none">{t[lang].title}</h1>
+                <p className="text-xl text-white/40 font-medium tracking-tight">{t[lang].subtitle}</p>
               </div>
 
               {/* Community Outbreak Tracker */}
