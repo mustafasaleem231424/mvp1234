@@ -57,11 +57,12 @@ export async function POST(request) {
         "isNotPlant": false,
         "crop": "Species Name",
         "disease": "Common Disease Name",
-        "scientificName": "Scientific Pathogen Name (e.g. Venturia inaequalis)",
+        "scientificName": "Scientific Pathogen Name",
         "pathogenType": "Fungal/Bacterial/Viral/Nutrient",
         "isHealthy": boolean,
+        "isRuined": boolean (True if infection is >80% and plant is beyond recovery),
         "confidence": number,
-        "severity": "Low/Medium/High",
+        "severity": "Low/Medium/High/Critical",
         "advice": "Treatment Protocol",
         "shouldSpray": boolean
       }
@@ -94,12 +95,14 @@ export async function POST(request) {
 
     const formattedResult = {
       isNotPlant: !!aiData.isNotPlant,
+      isRuined: !!aiData.isRuined,
       topPrediction: {
         label: aiData.disease || 'Unknown',
         scientificName: aiData.scientificName || 'N/A',
         pathogenType: aiData.pathogenType || 'Unknown',
         confidence: aiData.confidence || 0.8,
         isHealthy: !!aiData.isHealthy,
+        isRuined: !!aiData.isRuined,
         diseaseInfo: {
           crop: aiData.crop || 'Plant',
           disease: aiData.disease || 'Unknown',

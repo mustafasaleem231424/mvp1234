@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Leaf, Camera, ImageIcon, RefreshCw, AlertCircle, Scan, 
   ArrowLeft, Download, Video, Zap, AlertTriangle, Bug,
-  ShoppingCart, Languages, Activity, CloudRain, TrendingDown
+  ShoppingCart, Languages, Activity, CloudRain, TrendingDown, Skull
 } from 'lucide-react';
 import { analyzeImage, MODEL_READY } from '@/lib/model';
 
@@ -23,8 +23,8 @@ export default function DashboardPage() {
   const [lang, setLang] = useState('en');
   
   const t = {
-    en: { title: "Capture Engine", subtitle: "Deploy neural network to scan crop health.", launch: "Launch Engine", outbreak: "Local Outbreaks", outbreakDesc: "3 cases detected within 5km." },
-    hi: { title: "कैप्चर इंजन", subtitle: "फसल स्वास्थ्य की जांच के लिए एआई।", launch: "इंजन शुरू करें", outbreak: "स्थानीय प्रकोप", outbreakDesc: "5 किमी के भीतर 3 मामले मिले।" }
+    en: { title: "Capture Engine", subtitle: "Deploy neural network to scan crop health.", launch: "Launch Engine", outbreak: "Local Outbreaks", outbreakDesc: "3 cases detected within 5km.", ruined: "Total Loss" },
+    hi: { title: "कैप्चर इंजन", subtitle: "फसल स्वास्थ्य की जांच के लिए एआई।", launch: "इंजन शुरू करें", outbreak: "स्थानीय प्रकोप", outbreakDesc: "5 किमी के भीतर 3 मामले मिले।", ruined: "कुल नुकसान" }
   };
 
   const fileInputRef = useRef(null);
@@ -398,12 +398,13 @@ export default function DashboardPage() {
               ) : (
                 <>
                   {/* Direct Diagnostic Verdict */}
-                  <div className={`mb-8 p-6 rounded-2xl border-2 text-center ${result.isHealthy ? 'bg-green-500/10 border-green-500/30' : result.shouldSpray ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+                  <div className={`mb-8 p-6 rounded-2xl border-2 text-center ${result.isHealthy ? 'bg-green-500/10 border-green-500/30' : result.isRuined ? 'bg-black border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)]' : result.shouldSpray ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+                    {result.isRuined && <Skull className="w-12 h-12 text-red-500 mx-auto mb-4 animate-bounce" />}
                     <h2 className="text-4xl md:text-5xl font-black tracking-tight uppercase mb-2">
-                      {result.isHealthy ? 'Healthy Specimen' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
+                      {result.isHealthy ? 'Healthy Specimen' : result.isRuined ? 'Crop Ruined' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
                     </h2>
-                    <p className={`text-sm font-black uppercase tracking-[0.2em] ${result.isHealthy ? 'text-green-500' : result.shouldSpray ? 'text-red-500' : 'text-amber-500'}`}>
-                      {result.isHealthy ? 'No Intervention Required' : result.shouldSpray ? 'Action Required: Spray Recommended' : 'Action Required: Monitor Closely'}
+                    <p className={`text-sm font-black uppercase tracking-[0.2em] ${result.isHealthy ? 'text-green-500' : 'text-red-500'}`}>
+                      {result.isHealthy ? 'No Intervention Required' : result.isRuined ? 'Total Loss: No Point in Spraying' : result.shouldSpray ? 'Action Required: Spray Recommended' : 'Action Required: Monitor Closely'}
                     </p>
                   </div>
 
@@ -489,7 +490,7 @@ export default function DashboardPage() {
                       {result.topPrediction.diseaseInfo?.advice || 'No specific advice provided by AI.'}
                     </p>
                     
-                    {result.shouldSpray && (
+                    {result.shouldSpray && !result.isRuined && (
                       <a 
                         href={`https://www.google.com/search?q=buy+fungicide+for+${result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}+treatment`}
                         target="_blank"
@@ -499,6 +500,13 @@ export default function DashboardPage() {
                         <ShoppingCart className="w-5 h-5" />
                         <span>Buy Recommended Treatment</span>
                       </a>
+                    )}
+
+                    {result.isRuined && (
+                      <div className="p-6 rounded-2xl bg-red-500/10 border border-red-500/20 text-center">
+                        <p className="text-red-500 font-bold uppercase tracking-widest text-xs">Pathological Advice</p>
+                        <p className="text-white font-medium mt-2">Crop is past recovery. Dispose of immediately to prevent further infestation of nearby healthy crops.</p>
+                      </div>
                     )}
                   </div>
                 </>
