@@ -303,7 +303,7 @@ export default function DashboardPage() {
                     Unrecognized Object
                   </h2>
                   <p className="text-[var(--text-secondary)] font-medium mb-8">
-                    The AI confidence score is extremely low ({(result.confidence * 100).toFixed(1)}%). This usually happens when the image is blurry, too dark, or does not contain a recognizable plant leaf.
+                    The AI confidence score is extremely low ({((result.confidence || 0) * 100).toFixed(1)}%). This usually happens when the image is blurry, too dark, or does not contain a recognizable plant leaf.
                   </p>
                   
                   <div className="mt-2 inline-block px-10 py-5 rounded-3xl bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-2 border-amber-200 dark:border-amber-800">
@@ -338,7 +338,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Confidence</p>
-                      <p className="text-xl font-bold">{(result.confidence * 100).toFixed(1)}%</p>
+                      <p className="text-xl font-bold">{((result.confidence || 0) * 100).toFixed(1)}%</p>
                     </div>
                     <div className="card !p-6 bg-white/5 border-white/10">
                       <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Status</p>
