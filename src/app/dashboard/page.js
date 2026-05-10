@@ -220,36 +220,49 @@ export default function DashboardPage() {
   }, [cameraStream]);
 
   return (
-    <div className="min-h-screen relative flex flex-col selection:bg-white selection:text-black overflow-x-hidden bg-black">
-      {/* Deep Space Background */}
+    <div className="min-h-screen relative flex flex-col selection:bg-[#21A049] selection:text-white overflow-x-hidden">
+      {/* Dynamic Neural Atmosphere */}
       <div className="neural-particles" />
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-[#10B981] blur-[250px] rounded-full opacity-[0.03]" />
-        <div className="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-[#10B981] blur-[250px] rounded-full opacity-[0.03]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#21A049] blur-[180px] rounded-full opacity-5" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#10B981] blur-[180px] rounded-full opacity-5" />
       </div>
 
-      {/* ─── Elite Obsidian Header ─────────────────── */}
-      <header className="sticky top-0 z-50 bg-black/60 backdrop-blur-xl border-b border-white/5">
-        <div className="container-expert h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-              <Leaf className="w-6 h-6 text-black" />
-            </div>
-            <span className="font-black text-xl tracking-tighter text-white">Preci<span className="text-[#10B981]">Farm</span></span>
+      {/* ─── Premium Header ───────────────────────── */}
+      <header className="sticky top-0 z-50 glass-header">
+        <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors group">
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-bold text-xs uppercase tracking-widest">Back to Hub</span>
           </Link>
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setLang(l => l === 'en' ? 'hi' : 'en')}
               className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
             >
-              <Languages className="w-4 h-4 text-[#10B981]" />
+              <Languages className="w-4 h-4 text-[#21A049]" />
               <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{lang === 'en' ? 'हिन्दी' : 'English'}</span>
             </button>
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F5E9] dark:bg-[#121F16] border border-[#A5D6A7] dark:border-[#2E7D32]">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4CAF50] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4CAF50]"></span>
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-tighter text-[#2E7D32] dark:text-[#4CAF50]">Expert AI Active</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-md">
+                <Leaf className="w-4 h-4 text-white" />
+              </div>
+              <span className="font-black tracking-tighter text-lg text-[var(--green-dark)]">PreciFarm</span>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 w-full max-w-4xl mx-auto px-6 py-12 relative z-10 flex flex-col items-center">
+      <main className="flex-1 max-w-2xl mx-auto w-full px-6 py-12 relative z-10 flex flex-col">
+        {/* AI engine is always ready via Cloud API */}
+
         <AnimatePresence mode="wait">
           {/* ─── Mode Selection ────────────────────── */}
           {!imagePreview && !inputMode && (
@@ -258,11 +271,11 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full space-y-12"
+              className="w-full space-y-8"
             >
-              <div className="text-center space-y-4">
-                <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none">{t[lang].title}</h1>
-                <p className="text-xl text-white/40 font-medium tracking-tight">{t[lang].subtitle}</p>
+              <div className="text-center space-y-2">
+                <h1 className="text-4xl font-black tracking-tighter text-[var(--text)]">{t[lang].title}</h1>
+                <p className="text-[var(--text-secondary)] font-medium">{t[lang].subtitle}</p>
               </div>
 
               {/* Community Outbreak Tracker */}
@@ -315,24 +328,24 @@ export default function DashboardPage() {
           {/* ─── Viewfinders ───────────────────────── */}
           {(inputMode === 'camera' || inputMode === 'video') && !imagePreview && (
             <motion.div key="finder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full space-y-6">
-              <div className="relative aspect-video rounded-[5vw] overflow-hidden bg-black shadow-2xl border-[0.5vw] border-white/5">
+              <div className="relative aspect-[4/3] rounded-[32px] overflow-hidden bg-black shadow-2xl border-4 border-[var(--border)]">
                 <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] border-[0.2vw] border-white/10 rounded-[4vw] relative">
-                    <div className="absolute top-0 left-0 w-[5vw] h-[5vw] border-t-[0.4vw] border-l-[0.4vw] border-[#10B981] rounded-tl-[2vw] -translate-x-[1vw] -translate-y-[1vw]" />
-                    <div className="absolute top-0 right-0 w-[5vw] h-[5vw] border-t-[0.4vw] border-r-[0.4vw] border-[#10B981] rounded-tr-[2vw] translate-x-[1vw] -translate-y-[1vw]" />
-                    <div className="absolute bottom-0 left-0 w-[5vw] h-[5vw] border-b-[0.4vw] border-l-[0.4vw] border-[#10B981] rounded-bl-[2vw] -translate-x-[1vw] translate-y-[1vw]" />
-                    <div className="absolute bottom-0 right-0 w-[5vw] h-[5vw] border-b-[0.4vw] border-r-[0.4vw] border-[#10B981] rounded-br-[2vw] translate-x-[1vw] translate-y-[1vw]" />
-                    <div className="absolute inset-0 bg-[#10B981]/5" />
+                  <div className="w-64 h-64 border-2 border-white/20 rounded-[40px] relative">
+                    <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-[#21A049] rounded-tl-2xl -translate-x-2 -translate-y-2" />
+                    <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-[#21A049] rounded-tr-2xl translate-x-2 -translate-y-2" />
+                    <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-[#21A049] rounded-bl-2xl -translate-x-2 translate-y-2" />
+                    <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-[#21A049] rounded-br-2xl translate-x-2 translate-y-2" />
+                    <div className="absolute inset-0 bg-[#21A049]/10" />
                     <div className="scan-grid" />
                     <div className="scan-laser" />
                   </div>
                 </div>
               </div>
-              <div className="flex gap-[2vw]">
-                <button onClick={handleReset} className="btn btn-secondary flex-1 !py-[2vh]">Abort</button>
-                <button onClick={inputMode === 'camera' ? capturePhoto : captureVideoFrame} className="btn btn-primary flex-[2] shadow-2xl !py-[2vh]">
-                  {inputMode === 'camera' ? <Camera className="w-[2vw] h-[2vw]"/> : <Scan className="w-[2vw] h-[2vw]"/>}
+              <div className="flex gap-4">
+                <button onClick={handleReset} className="btn btn-secondary flex-1">Abort</button>
+                <button onClick={inputMode === 'camera' ? capturePhoto : captureVideoFrame} className="btn btn-primary flex-[2] shadow-2xl">
+                  {inputMode === 'camera' ? <Camera className="w-6 h-6"/> : <Scan className="w-6 h-6"/>}
                   <span>{inputMode === 'camera' ? 'Capture Frame' : 'Extract Frame'}</span>
                 </button>
               </div>
@@ -342,25 +355,25 @@ export default function DashboardPage() {
           {/* ─── Analysis Stage ────────────────────── */}
           {imagePreview && !result && (
             <motion.div key="analysis" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full space-y-8">
-              <div className="relative rounded-[5vw] overflow-hidden shadow-2xl border-[0.5vw] border-white/5">
+              <div className="relative rounded-[40px] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.3)] border-4 border-[var(--border)]">
                 <img ref={imgRef} src={imagePreview} alt="Target" className="w-full h-full object-cover aspect-square" />
                 <AnimatePresence>
                   {loading && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/60 backdrop-blur-2xl flex flex-col items-center justify-center">
-                      <div className="w-[10vw] h-[10vw] max-w-[100px] max-h-[100px] relative mb-6">
-                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }} className="absolute inset-0 border-[0.4vw] border-white/10 rounded-full" />
-                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }} className="absolute inset-0 border-t-[0.4vw] border-[#10B981] rounded-full" />
-                        <Scan className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[4vw] h-[4vw] text-[#10B981] animate-pulse" />
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center">
+                      <div className="w-24 h-24 relative mb-6">
+                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 2, ease: "linear" }} className="absolute inset-0 border-4 border-white/20 rounded-full" />
+                        <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }} className="absolute inset-0 border-t-4 border-[#21A049] rounded-full" />
+                        <Scan className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-[#21A049] animate-pulse" />
                       </div>
-                      <span className="font-black text-[1vw] uppercase tracking-[0.5em] text-white">Neural Processing...</span>
+                      <span className="font-black text-xs uppercase tracking-[0.3em] text-white">Neural Processing...</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
-              <div className="flex gap-[2vw]">
-                <button onClick={handleReset} disabled={loading} className="btn btn-secondary flex-1 !py-[2vh]">Reset</button>
-                <button onClick={handleAnalyze} disabled={loading} className="btn btn-primary flex-[2] !py-[3vh] shadow-2xl">
-                  {loading ? <RefreshCw className="w-[2vw] h-[2vw] animate-spin" /> : <Zap className="w-[2vw] h-[2vw]" />}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button onClick={handleReset} disabled={loading} className="btn btn-secondary flex-1">Reset</button>
+                <button onClick={handleAnalyze} disabled={loading} className="btn btn-primary flex-[2] text-xl !py-6 shadow-2xl">
+                  {loading ? <RefreshCw className="w-6 h-6 animate-spin" /> : <Zap className="w-6 h-6" />}
                   <span>{loading ? 'Processing...' : 'Run Diagnostics'}</span>
                 </button>
               </div>
@@ -389,17 +402,14 @@ export default function DashboardPage() {
               ) : (
                 <>
                   {/* Direct Diagnostic Verdict */}
-                  <div className={`mb-12 p-10 rounded-[32px] border text-center transition-all duration-700 ${result.isHealthy ? 'bg-white/5 border-white/10' : result.isRuined ? 'bg-red-500/5 border-red-500/20 shadow-[0_0_50px_rgba(239,68,68,0.1)]' : 'bg-white/5 border-white/10'}`}>
-                    {result.isRuined && <Skull className="w-16 h-16 text-red-500 mx-auto mb-6 animate-pulse" />}
-                    <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-white mb-4">
+                  <div className={`mb-8 p-6 rounded-2xl border-2 text-center ${result.isHealthy ? 'bg-green-500/10 border-green-500/30' : result.isRuined ? 'bg-black border-red-500 shadow-[0_0_30px_rgba(239,68,68,0.3)]' : result.shouldSpray ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+                    {result.isRuined && <Skull className="w-12 h-12 text-red-500 mx-auto mb-4 animate-bounce" />}
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tight uppercase mb-2">
                       {result.isHealthy ? 'Healthy Specimen' : result.isRuined ? 'Crop Ruined' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
                     </h2>
-                    <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                      <div className={`w-2 h-2 rounded-full ${result.isHealthy ? 'bg-[#10B981]' : 'bg-red-500'}`} />
-                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">
-                        {result.isHealthy ? 'Specimen Clear' : result.isRuined ? 'Critical Loss' : 'Action Required'}
-                      </p>
-                    </div>
+                    <p className={`text-sm font-black uppercase tracking-[0.2em] ${result.isHealthy ? 'text-green-500' : 'text-red-500'}`}>
+                      {result.isHealthy ? 'No Intervention Required' : result.isRuined ? 'Total Loss: No Point in Spraying' : result.shouldSpray ? 'Action Required: Spray Recommended' : 'Action Required: Monitor Closely'}
+                    </p>
                   </div>
 
                   {/* Expert Pathogen Spotlight */}
