@@ -48,31 +48,30 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* ─── Hero Section (Compact Optimization) ───────── */}
-      <section className="relative pt-40 pb-24 px-6 lg:pt-48 lg:pb-32">
+      {/* ─── Hero Section (Micro-Compact) ─────────── */}
+      <section className="relative pt-32 pb-20 px-6 lg:pt-40 lg:pb-24">
         {/* Deep Space Atmosphere */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-[#10B981] opacity-[0.02] blur-[150px] rounded-full" />
-          <div className="absolute bottom-[-10%] left-[-5%] w-[800px] h-[800px] bg-[#10B981] opacity-[0.02] blur-[150px] rounded-full" />
+          <div className="absolute top-[-5%] right-[-5%] w-[600px] h-[600px] bg-[#10B981] opacity-[0.01] blur-[100px] rounded-full" />
+          <div className="absolute bottom-[-5%] left-[-5%] w-[600px] h-[600px] bg-[#10B981] opacity-[0.01] blur-[100px] rounded-full" />
         </div>
         
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="max-w-5xl mx-auto text-center relative z-10"
+          className="max-w-4xl mx-auto text-center relative z-10"
         >
           <motion.div 
             variants={itemVariants}
-            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-white/10 bg-white/5 text-white/50 text-[9px] font-black uppercase tracking-[0.3em] mb-10 backdrop-blur-xl"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/5 bg-white/5 text-white/40 text-[8px] font-black uppercase tracking-[0.2em] mb-8"
           >
-            <span className="flex h-1.5 w-1.5 rounded-full bg-[#10B981]" />
             Elite Botanical Intelligence
           </motion.div>
 
           <motion.h1 
             variants={itemVariants}
-            className="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter mb-10 leading-[0.9] text-white"
+            className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter mb-8 leading-[0.9] text-white"
           >
             Nurture.<br />
             <span className="text-[#10B981]">Flourish.</span>
@@ -80,39 +79,35 @@ export default function LandingPage() {
 
           <motion.p 
             variants={itemVariants}
-            className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed text-white/40 font-medium tracking-tight"
+            className="text-md sm:text-lg mb-10 max-w-xl mx-auto leading-relaxed text-white/30 font-medium tracking-tight"
           >
-            Master your harvest with the world's most advanced plant pathology engine. PreciFarm empowers you with neural-grid diagnostics and soil-synergy intelligence.
+            Advanced plant pathology. Neural-grid diagnostics and soil-synergy intelligence for the modern harvest.
           </motion.p>
 
           <motion.div 
             variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link href="/dashboard" className="btn btn-primary text-xl !py-6 !px-12 !rounded-full shadow-xl group">
-              <ScanLine className="w-6 h-6 group-hover:scale-110 transition-transform" /> 
+            <Link href="/dashboard" className="btn btn-primary text-lg !py-5 !px-10 !rounded-full shadow-lg group">
+              <ScanLine className="w-5 h-5 group-hover:scale-110 transition-transform" /> 
               <span>Start Analysis</span>
-            </Link>
-            <Link href="/login" className="btn btn-secondary text-xl !py-6 !px-12 !rounded-full border-white/5 hover:border-white/10 transition-all">
-              Farmer Portal
             </Link>
           </motion.div>
 
-          {/* Corrected Facts / Mastery Bar */}
+          {/* Micro Facts Bar */}
           <motion.div 
             variants={itemVariants}
-            className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto border-t border-white/5 pt-16"
+            className="mt-20 grid grid-cols-4 gap-6 max-w-2xl mx-auto border-t border-white/5 pt-12"
           >
             {[
-              { icon: Globe, label: 'Expert Nodes', val: 'Global' },
-              { icon: Zap, label: 'Neural Latency', val: '400ms' },
-              { icon: ShieldCheck, label: 'Precision', val: '99.4%' },
-              { icon: BarChart3, label: 'Yield Mastery', val: '+24%' },
+              { label: 'Expert', val: 'Global' },
+              { label: 'Latency', val: '400ms' },
+              { label: 'Precision', val: '99.4%' },
+              { label: 'Yield', val: '+24%' },
             ].map((stat, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 group cursor-default">
-                <stat.icon className="w-5 h-5 text-[#10B981] group-hover:scale-110 transition-transform duration-500" />
-                <span className="text-2xl font-black text-white tracking-tighter">{stat.val}</span>
-                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">{stat.label}</span>
+              <div key={i} className="flex flex-col items-center gap-1 group cursor-default">
+                <span className="text-xl font-black text-white tracking-tighter">{stat.val}</span>
+                <span className="text-[8px] font-black text-white/10 uppercase tracking-[0.2em]">{stat.label}</span>
               </div>
             ))}
           </motion.div>
