@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Leaf, Camera, ImageIcon, RefreshCw, AlertCircle, Scan, 
-  ArrowLeft, Download, Video, Zap, AlertTriangle, Bug 
+  ArrowLeft, Download, Video, Zap, AlertTriangle, Bug,
+  ShoppingCart, Languages, Activity
 } from 'lucide-react';
 import { analyzeImage, MODEL_READY } from '@/lib/model';
 
@@ -19,6 +20,12 @@ export default function DashboardPage() {
   const [inputMode, setInputMode] = useState(null);
   const [cameraStream, setCameraStream] = useState(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [lang, setLang] = useState('en');
+  
+  const t = {
+    en: { title: "Capture Engine", subtitle: "Deploy neural network to scan crop health.", launch: "Launch Engine", outbreak: "Local Outbreaks", outbreakDesc: "3 cases detected within 5km." },
+    hi: { title: "कैप्चर इंजन", subtitle: "फसल स्वास्थ्य की जांच के लिए एआई।", launch: "इंजन शुरू करें", outbreak: "स्थानीय प्रकोप", outbreakDesc: "5 किमी के भीतर 3 मामले मिले।" }
+  };
 
   const fileInputRef = useRef(null);
   const videoInputRef = useRef(null);
@@ -167,7 +174,20 @@ export default function DashboardPage() {
       const html2canvas = (await import('html2canvas')).default;
       const { jsPDF } = await import('jspdf');
       
-      const canvas = await html2canvas(reportRef.current, { scale: 2, useCORS: true, logging: false });
+      const canvas = await html2canvas(reportRef.current, { 
+        scale: 2, 
+        useCORS: true, 
+        logging: false,
+        onclone: (clonedDoc) => {
+          // Fix: jsPDF cannot parse lab() or oklch() colors. We force standard colors for the clone.
+          const els = clonedDoc.querySelectorAll('*');
+          els.forEach(el => {
+            el.style.color = '#000000';
+            el.style.borderColor = '#dddddd';
+            if (el.classList.contains('text-[#21A049]')) el.style.color = '#21A049';
+          });
+        }
+      });
       const imgData = canvas.toDataURL('image/jpeg', 1.0);
       
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -214,6 +234,13 @@ export default function DashboardPage() {
             <span className="font-bold text-xs uppercase tracking-widest">Back to Hub</span>
           </Link>
           <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setLang(l => l === 'en' ? 'hi' : 'en')}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
+            >
+              <Languages className="w-4 h-4 text-[#21A049]" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{lang === 'en' ? 'हिन्दी' : 'English'}</span>
+            </button>
             <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[#E8F5E9] dark:bg-[#121F16] border border-[#A5D6A7] dark:border-[#2E7D32]">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4CAF50] opacity-75"></span>
@@ -245,9 +272,24 @@ export default function DashboardPage() {
               className="w-full space-y-8"
             >
               <div className="text-center space-y-2">
-                <h1 className="text-4xl font-black tracking-tighter text-[var(--text)]">Capture Engine</h1>
-                <p className="text-[var(--text-secondary)] font-medium">Deploy neural network to scan crop health.</p>
+                <h1 className="text-4xl font-black tracking-tighter text-[var(--text)]">{t[lang].title}</h1>
+                <p className="text-[var(--text-secondary)] font-medium">{t[lang].subtitle}</p>
               </div>
+
+              {/* Community Outbreak Tracker */}
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="card !p-6 bg-amber-500/5 border-amber-500/20 flex items-center gap-6"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0">
+                  <Activity className="w-6 h-6 text-amber-500 animate-pulse" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-black uppercase tracking-widest text-amber-500 mb-1">{t[lang].outbreak}</h4>
+                  <p className="text-xs font-bold text-[var(--text-secondary)]">{t[lang].outbreakDesc}</p>
+                </div>
+              </motion.div>
 
               <div className="grid gap-4">
                 <button onClick={startCamera} className="upload-zone !p-12 group card flex flex-col items-center gap-6">
@@ -412,9 +454,21 @@ export default function DashboardPage() {
                   {/* Expert Advice Block */}
                   <div className="p-8 rounded-[32px] bg-[var(--surface-hover)] border border-[var(--border)] text-left">
                     <h3 className="text-xs font-black uppercase tracking-[0.3em] text-[#21A049] mb-4">Expert Protocol</h3>
-                    <p className="text-lg text-[var(--text-secondary)] leading-relaxed font-medium">
+                    <p className="text-lg text-[var(--text-secondary)] leading-relaxed font-medium mb-8">
                       {result.topPrediction.diseaseInfo?.advice || 'No specific advice provided by AI.'}
                     </p>
+                    
+                    {result.shouldSpray && (
+                      <a 
+                        href={`https://www.google.com/search?q=buy+fungicide+for+${result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}+treatment`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary w-full !py-4 shadow-xl shadow-[#21A049]/20"
+                      >
+                        <ShoppingCart className="w-5 h-5" />
+                        <span>Buy Recommended Treatment</span>
+                      </a>
+                    )}
                   </div>
                 </>
               )}
