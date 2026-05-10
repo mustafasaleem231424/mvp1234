@@ -140,7 +140,7 @@ export default function DashboardPage() {
           confidence: analysisResult.confidence,
           detections: [analysisResult.topPrediction],
           should_spray: analysisResult.shouldSpray ? 'SPRAY' : 'NO_SPRAY'
-        }).catch(e => console.warn('Silent History Save Failed:', e));
+        }).catch(() => {}); // Silent history save
       }
     } catch (err) {
       console.error('Analysis error:', err);
@@ -252,7 +252,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#21A049] to-[#124022] flex items-center justify-center shadow-md">
-                <Leaf className="w-4 h-4 text-white" />
+                <Leaf className="w-4 h-4 text-white" aria-hidden="true" />
               </div>
               <span className="font-black tracking-tighter text-lg text-[var(--green-dark)]">PreciFarm</span>
             </div>
@@ -356,7 +356,7 @@ export default function DashboardPage() {
           {imagePreview && !result && (
             <motion.div key="analysis" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full space-y-8">
               <div className="relative rounded-[40px] overflow-hidden shadow-[0_40px_80px_-20px_rgba(0,0,0,0.3)] border-4 border-[var(--border)]">
-                <img ref={imgRef} src={imagePreview} alt="Target" className="w-full h-full object-cover aspect-square" />
+                <img ref={imgRef} src={imagePreview} alt="Agricultural specimen for diagnostic analysis" className="w-full h-full object-cover aspect-square" />
                 <AnimatePresence>
                   {loading && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center">

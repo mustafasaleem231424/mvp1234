@@ -1,12 +1,13 @@
 {
-  "name": "mvp",
-  "version": "0.1.0",
+  "name": "preci-farm",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clean": "rm -rf .next node_modules out"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

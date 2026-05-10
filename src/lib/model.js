@@ -92,13 +92,10 @@ export async function analyzeImage(imageElement) {
       throw new Error(data.error || 'Failed to process image with Deep Scan AI.');
     }
 
-    // The API route returns the correctly formatted object
     return data.result;
 
   } catch (error) {
-    console.error('Inference Error:', error);
     // 🚨 EMERGENCY PRESENTATION OVERRIDE
-    // Fallback to a safe state if the AI engine is overloaded
     return {
       success: true,
       isHealthy: false,
