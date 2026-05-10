@@ -13,33 +13,44 @@ export const MODEL_READY = true;
  * Helper to convert an image element (img, canvas, video) into a base64 JPEG string.
  */
 function getBase64FromImage(imageElement) {
-  // If it's a data URL string, return it
-  if (typeof imageElement === 'string' && imageElement.startsWith('data:image')) {
-    return imageElement;
-  }
-
-  // If it's an img element and already a data URL, just return it
-  if (imageElement instanceof HTMLImageElement && imageElement.src.startsWith('data:image')) {
-    return imageElement.src;
-  }
-
+  // We MUST process all images through a canvas to ensure they are resized 
+  // and compressed before sending to the API. This prevents 'Load Failed' errors
+  // caused by Vercel's 4.5MB payload limit.
+  
   const canvas = document.createElement('canvas');
-  // Use a reasonable resolution for the API to save bandwidth but keep detail
-  canvas.width = imageElement.naturalWidth || imageElement.videoWidth || imageElement.width || 800;
-  canvas.height = imageElement.naturalHeight || imageElement.videoHeight || imageElement.height || 800;
-  
-  // Cap max dimension to 1024 to speed up API transfer
-  const maxDim = 1024;
-  if (canvas.width > maxDim || canvas.height > maxDim) {
-    const ratio = Math.min(maxDim / canvas.width, maxDim / canvas.height);
-    canvas.width = canvas.width * ratio;
-    canvas.height = canvas.height * ratio;
-  }
-
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
   
-  return canvas.toDataURL('image/jpeg', 0.85); // 85% quality JPEG
+  return new Promise((resolve) => {
+    const process = (img) => {
+      // Use a reasonable resolution for the API to save bandwidth but keep detail
+      let width = img.naturalWidth || img.videoWidth || img.width || 800;
+      let height = img.naturalHeight || img.videoHeight || img.height || 800;
+      
+      // Cap max dimension to 1024 to stay well under the 4.5MB limit
+      const maxDim = 1024;
+      if (width > maxDim || height > maxDim) {
+        const ratio = Math.min(maxDim / width, maxDim / height);
+        width = width * ratio;
+        height = height * ratio;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', 0.7)); // 70% quality to be extra safe
+    };
+
+    if (typeof imageElement === 'string' && imageElement.startsWith('data:image')) {
+      const img = new Image();
+      img.onload = () => process(img);
+      img.src = imageElement;
+    } else if (imageElement instanceof HTMLImageElement) {
+      if (imageElement.complete) process(imageElement);
+      else imageElement.onload = () => process(imageElement);
+    } else {
+      process(imageElement);
+    }
+  });
 }
 
 /**
@@ -54,7 +65,7 @@ export async function analyzeImage(imageElement) {
   }
 
   try {
-    const base64Image = getBase64FromImage(imageElement);
+    const base64Image = await getBase64FromImage(imageElement);
 
     const response = await fetch('/api/analyze', {
       method: 'POST',
