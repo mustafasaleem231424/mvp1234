@@ -7,37 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Camera, Image as ImageIcon, Video, Scan, X, RefreshCw, AlertCircle, Leaf, CheckCircle2, AlertTriangle, ArrowLeft, Zap, Download, ChevronRight } from 'lucide-react';
 import { analyzeImage, MODEL_READY } from '@/lib/model';
 
-const playTone = (type) => {
-  if (typeof window === 'undefined') return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    
-    if (type === 'green') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(1046.50, ctx.currentTime + 0.2);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-    } else if (type === 'amber') {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(392.00, ctx.currentTime);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-    } else if (type === 'red') {
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(300, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.3);
-      gain.gain.setValueAtTime(0.1, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-    }
-    osc.start();
-    osc.stop(ctx.currentTime + 0.5);
-  } catch (e) { console.error('Audio blocked', e); }
-};
+// Expert Diagnostic Engine - Audio Cues Deprecated for Direct Information UI
 
 export default function DashboardPage() {
   const [imagePreview, setImagePreview] = useState(null);
@@ -141,7 +111,6 @@ export default function DashboardPage() {
       });
       const analysisResult = await analyzeImage(img);
       setResult(analysisResult);
-      playTone(analysisResult.light);
     } catch (err) {
       console.error('Analysis error:', err);
       setResult({ error: 'Analysis failed. Please try again.' });
@@ -344,17 +313,47 @@ export default function DashboardPage() {
                   </div>
                 </div>
               ) : (
-                <div className="card !p-12 text-center relative overflow-hidden bg-[var(--surface)] border-2 border-[var(--border)] shadow-2xl">
-                  <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-                    {result.isHealthy ? 'Healthy' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
-                  </h2>
-                  
-                  <div className={`mt-6 inline-block px-10 py-5 rounded-3xl ${result.shouldSpray ? 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-2 border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-2 border-green-200 dark:border-green-800'}`}>
-                    <p className="text-3xl font-black uppercase tracking-widest">
-                      {result.shouldSpray ? 'Spray Pesticide' : 'Do Not Spray'}
+                <>
+                  {/* Direct Diagnostic Verdict */}
+                  <div className={`mb-8 p-6 rounded-2xl border-2 text-center ${result.isHealthy ? 'bg-green-500/10 border-green-500/30' : result.shouldSpray ? 'bg-red-500/10 border-red-500/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tight uppercase mb-2">
+                      {result.isHealthy ? 'Healthy Specimen' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
+                    </h2>
+                    <p className={`text-sm font-black uppercase tracking-[0.2em] ${result.isHealthy ? 'text-green-500' : result.shouldSpray ? 'text-red-500' : 'text-amber-500'}`}>
+                      {result.isHealthy ? 'No Intervention Required' : result.shouldSpray ? 'Action Required: Spray Recommended' : 'Action Required: Monitor Closely'}
                     </p>
                   </div>
-                </div>
+
+                  {/* Info-Driven Insights Grid */}
+                  <div className="grid grid-cols-2 gap-4 mb-8">
+                    <div className="card !p-6 bg-white/5 border-white/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Subject</p>
+                      <p className="text-xl font-bold">{result.topPrediction.diseaseInfo?.crop || 'Plant'}</p>
+                    </div>
+                    <div className="card !p-6 bg-white/5 border-white/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Severity</p>
+                      <p className={`text-xl font-bold ${result.isHealthy ? 'text-green-500' : 'text-red-500'}`}>
+                        {result.isHealthy ? 'N/A' : result.topPrediction.diseaseInfo?.severity || 'Moderate'}
+                      </p>
+                    </div>
+                    <div className="card !p-6 bg-white/5 border-white/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Confidence</p>
+                      <p className="text-xl font-bold">{(result.confidence * 100).toFixed(1)}%</p>
+                    </div>
+                    <div className="card !p-6 bg-white/5 border-white/10">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Status</p>
+                      <p className="text-xl font-bold uppercase">{result.shouldSpray ? 'Spray' : 'Safe'}</p>
+                    </div>
+                  </div>
+
+                  {/* Expert Advice Block */}
+                  <div className="p-8 rounded-[32px] bg-[var(--surface-hover)] border border-[var(--border)] text-left">
+                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-[#21A049] mb-4">Expert Protocol</h3>
+                    <p className="text-lg text-[var(--text-secondary)] leading-relaxed font-medium">
+                      {result.topPrediction.diseaseInfo?.advice || 'No specific advice provided by AI.'}
+                    </p>
+                  </div>
+                </>
               )}
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -406,21 +405,36 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Diagnosis Summary */}
+              {/* Diagnosis Summary Table */}
               <div className="mb-10 p-8 rounded-3xl bg-gray-50 border border-gray-200">
-                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-6">Primary Diagnosis</h2>
-                <div className="flex items-center gap-6">
-                  <div className={`w-20 h-20 rounded-full flex-shrink-0 flex items-center justify-center ${result.isHealthy ? 'bg-green-100' : 'bg-red-100'}`}>
-                    <div className={`w-12 h-12 rounded-full ${result.isHealthy ? 'bg-green-500' : 'bg-red-500'}`} />
+                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-6">Laboratory Insights</h2>
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Diagnosis</p>
+                    <p className="text-xl font-bold text-gray-900">{result.isHealthy ? 'Healthy Plant' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}</p>
                   </div>
                   <div>
-                    <h3 className="text-3xl font-black text-gray-900 mb-2">
-                      {result.isHealthy ? 'Healthy Plant' : result.topPrediction.diseaseInfo?.disease || result.topPrediction.label}
-                    </h3>
-                    <p className="text-lg font-medium text-gray-600">
-                      Crop: {result.isHealthy ? 'Identified Plant' : result.topPrediction.diseaseInfo?.crop || 'Unknown'}
+                    <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Subject</p>
+                    <p className="text-xl font-bold text-gray-900">{result.topPrediction.diseaseInfo?.crop || 'Identified Specimen'}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Severity Index</p>
+                    <p className={`text-xl font-bold ${result.isHealthy ? 'text-green-600' : 'text-red-600'}`}>
+                      {result.isHealthy ? 'N/A (Minimal)' : result.topPrediction.diseaseInfo?.severity || 'Moderate'}
                     </p>
                   </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Recommendation</p>
+                    <p className="text-xl font-bold uppercase">{result.shouldSpray ? 'Spray Recommended' : 'No Action Needed'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Expert Reasoning */}
+              <div>
+                <h2 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-4">Expert Protocol & Pathological Reasoning</h2>
+                <div className="p-8 rounded-3xl border-2 border-gray-100 bg-white leading-relaxed text-gray-700 font-medium">
+                  {result.topPrediction.diseaseInfo?.advice || 'Standard monitoring protocol recommended.'}
                 </div>
               </div>
 
