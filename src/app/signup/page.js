@@ -75,16 +75,16 @@ export default function SignUpPage() {
               </div>
             )}
             <div>
-              <label htmlFor="signup-email" className="block text-sm font-bold mb-2 text-[var(--text)]">Email</label>
+              <label htmlFor="signup-email" className="block text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/40">Email</label>
               <input id="signup-email" type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email"
-                className="w-full px-4 py-3.5 rounded-xl border text-base bg-[#F8FAF7] focus:ring-2 focus:ring-[#21A049]/30 focus:border-[#21A049] outline-none transition-all"
+                className="w-full px-5 py-4 rounded-2xl border text-base bg-white/5 focus:ring-2 focus:ring-[#21A049]/30 focus:border-[#21A049] outline-none transition-all placeholder:text-white/20"
                 style={{ borderColor: 'var(--border)' }}
                 placeholder="you@example.com" />
             </div>
             <div>
-              <label htmlFor="signup-password" className="block text-sm font-bold mb-2 text-[var(--text)]">Password</label>
+              <label htmlFor="signup-password" className="block text-[10px] font-black uppercase tracking-[0.2em] mb-2 text-white/40">Password</label>
               <input id="signup-password" type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="new-password" minLength={6}
-                className="w-full px-4 py-3.5 rounded-xl border text-base bg-[#F8FAF7] focus:ring-2 focus:ring-[#21A049]/30 focus:border-[#21A049] outline-none transition-all"
+                className="w-full px-5 py-4 rounded-2xl border text-base bg-white/5 focus:ring-2 focus:ring-[#21A049]/30 focus:border-[#21A049] outline-none transition-all placeholder:text-white/20"
                 style={{ borderColor: 'var(--border)' }}
                 placeholder="At least 6 characters" />
             </div>

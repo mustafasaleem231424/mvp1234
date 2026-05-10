@@ -117,38 +117,60 @@ export default function HistoryPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -100 }}
                     transition={{ delay: i * 0.05 }}
-                    className="card p-5 flex items-start gap-4"
+                    className="card p-6 border-white/10 bg-white/5 hover:bg-white/10 transition-all group"
                   >
-                    {/* Status indicator */}
-                    <div className={`w-3 h-3 rounded-full mt-2 flex-shrink-0 ${
-                      isHealthy ? 'bg-[#21A049]' : isSpray ? 'bg-[#D32F2F]' : 'bg-[#E59500]'
-                    }`} />
-
-                    {/* Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        {isHealthy
-                          ? <CheckCircle2 className="w-4 h-4 text-[#21A049] flex-shrink-0" />
-                          : <AlertTriangle className="w-4 h-4 text-[#E59500] flex-shrink-0" />
+                    <div className="flex items-start gap-4">
+                      {/* Status indicator */}
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                        isHealthy ? 'bg-green-500/10' : isSpray ? 'bg-red-500/10' : 'bg-amber-500/10'
+                      }`}>
+                        {isHealthy 
+                          ? <CheckCircle2 className="w-6 h-6 text-green-500" />
+                          : <AlertTriangle className={`w-6 h-6 ${isSpray ? 'text-red-500' : 'text-amber-500'}`} />
                         }
-                        <h3 className="font-bold text-[var(--text)] truncate">{label}</h3>
                       </div>
-                      {diseaseInfo.crop && <p className="text-xs text-[var(--text-secondary)] mb-1">{diseaseInfo.crop} · {diseaseInfo.severity || 'Expert AI'} Risk</p>}
-                      <div className="flex items-center gap-3 text-xs text-[var(--text-secondary)]">
-                        <span>{(confidence * 100).toFixed(0)}% confidence</span>
-                        <span>·</span>
-                        <span>{formatDate(scan.created_at)}</span>
-                      </div>
-                    </div>
 
-                    {/* Delete button */}
-                    <button
-                      onClick={() => handleDelete(scan.id)}
-                      className="p-2 rounded-lg hover:bg-[#FFEBEE] transition-colors text-[var(--text-secondary)] hover:text-[#D32F2F]"
-                      title="Delete scan"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                      {/* Details */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-4 mb-2">
+                          <h3 className="font-bold text-lg truncate uppercase tracking-tight">
+                            {isHealthy ? 'Healthy Plant' : label}
+                          </h3>
+                          <span className="text-[10px] font-black uppercase tracking-widest text-white/30 whitespace-nowrap">
+                            {formatDate(scan.created_at)}
+                          </span>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <p className="text-[9px] font-black uppercase text-white/20 tracking-widest">Confidence</p>
+                            <p className="text-sm font-bold">{(confidence * 100).toFixed(1)}%</p>
+                          </div>
+                          <div>
+                            <p className="text-[9px] font-black uppercase text-white/20 tracking-widest">Subject</p>
+                            <p className="text-sm font-bold truncate">{diseaseInfo.crop || 'Plant'}</p>
+                          </div>
+                        </div>
+
+                        {!isHealthy && (
+                          <div className="mt-4 p-3 rounded-lg bg-white/5 border border-white/5">
+                            <p className="text-[9px] font-black uppercase text-[#21A049] tracking-widest mb-1">Status</p>
+                            <p className="text-xs font-medium text-white/60 leading-relaxed">
+                              {isSpray ? 'Intervention Recommended' : 'Monitoring Protocol Active'}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Delete button */}
+                      <button
+                        onClick={() => handleDelete(scan.id)}
+                        className="p-2 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-500/20 transition-all text-white/20 hover:text-red-500"
+                        title="Delete scan"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </motion.div>
                 );
               })}

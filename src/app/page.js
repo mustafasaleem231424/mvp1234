@@ -87,15 +87,15 @@ export default function LandingPage() {
 
           <motion.div 
             variants={itemVariants}
-            className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            <Link href="/dashboard" className="btn btn-primary text-lg !py-5 !px-10 !rounded-3xl shadow-2xl group">
-              <ScanLine className="w-6 h-6 group-hover:scale-110 transition-transform" /> 
-              <span>Start Analysis</span>
+            <Link href="/dashboard" className="btn btn-primary text-xl !py-6 !px-12 !rounded-[32px] shadow-[0_0_50px_rgba(33,160,73,0.3)] hover:shadow-[0_0_80px_rgba(33,160,73,0.5)] group">
+              <ScanLine className="w-7 h-7 group-hover:scale-110 transition-transform" /> 
+              <span>Launch Engine</span>
             </Link>
-            <a href="#how-it-works" className="btn btn-secondary text-lg !py-5 !px-10 !rounded-3xl">
-              Platform Features
-            </a>
+            <Link href="/login" className="btn btn-secondary text-xl !py-6 !px-12 !rounded-[32px] border-white/10 hover:border-[#21A049] transition-all">
+              Farmer Login
+            </Link>
           </motion.div>
 
           {/* Metrics / Trust Bar */}
