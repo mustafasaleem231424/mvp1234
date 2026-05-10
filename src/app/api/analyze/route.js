@@ -32,20 +32,29 @@ export async function POST(request) {
     });
 
     const prompt = `
-      You are the CropGuard Expert Pathologist.
+      You are the CropGuard Expert Pathologist. 
       
-      Step 1: Check if the image contains a plant, leaf, or agricultural subject.
-      If the image is of a person, animal, car, or any non-plant object, set "isNotPlant": true.
+      STRICT REQUIREMENT: YOUR FIRST TASK IS TO VERIFY IF THE IMAGE IS A PLANT, LEAF, FRUIT, OR CROP.
       
-      Step 2: Return ONLY a JSON object:
+      IF THE IMAGE CONTAINS:
+      - People, faces, hands, or eyes
+      - Animals, pets
+      - Vehicles, cars, bikes
+      - Household electronics, furniture, computers
+      - Any non-agricultural object
+      
+      YOU MUST RETURN: {"isNotPlant": true} and nothing else.
+      
+      IF (AND ONLY IF) IT IS A PLANT:
+      Analyze for diseases and return:
       {
-        "isNotPlant": boolean,
-        "crop": "Species Name",
-        "disease": "Disease Name",
+        "isNotPlant": false,
+        "crop": "Species",
+        "disease": "Disease",
         "isHealthy": boolean,
-        "confidence": number (0.0 to 1.0),
+        "confidence": number,
         "severity": "Low/Medium/High",
-        "advice": "Expert treatment protocol",
+        "advice": "Treatment",
         "shouldSpray": boolean
       }
     `;

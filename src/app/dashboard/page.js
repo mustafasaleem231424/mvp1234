@@ -110,6 +110,14 @@ export default function DashboardPage() {
         img.src = imagePreview;
       });
       const analysisResult = await analyzeImage(img);
+      if (analysisResult.error) throw new Error(analysisResult.error);
+      
+      // AUTO-REJECTION FOR NON-PLANT OBJECTS
+      // If the AI is not at least 60% confident, we treat it as a non-plant object failsafe.
+      if (analysisResult.confidence < 0.6) {
+        analysisResult.isNotPlant = true;
+      }
+      
       setResult(analysisResult);
 
       // Automated History Saving (if logged in)
